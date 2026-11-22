@@ -10,18 +10,21 @@ async function start() {
     });
     sock.ev.on('creds.update', saveCreds);
 
-    if (!sock.authState.creds.registered) {
-        console.log('=== BOT START, TUNGGU CODE ===');
+    async function mintaCode() {
         await new Promise(r => setTimeout(r, 3000));
         try {
             const code = await sock.requestPairingCode('601125615941');
             console.log('====================');
             console.log('PAIRING CODE KAU: ' + code);
+            console.log('COPY PASTE JE, JANGAN TAIP SENDIRI. 1 tu nombor SATU, bukan I');
             console.log('====================');
-            console.log('CODE NI HIDUP LAMA, JANGAN RISAU, MASUKKAN PELAN-PELAN');
         } catch (e) {
             console.log('Gagal minta code: ' + e.message);
         }
+    }
+
+    if (!sock.authState.creds.registered) {
+        await mintaCode();
     }
 
     sock.ev.on('connection.update', async (update) => {
@@ -30,7 +33,8 @@ async function start() {
             console.log('=== DAH CONNECT! BOT HIDUP! ===');
         }
         if (connection === 'close') {
-            console.log('=== CONNECTION CLOSE, TAPI JANGAN RESTART, TUNGGU ===');
+            console.log('=== CONNECTION CLOSE, MINTA CODE BARU DALAM 5 SAAT ===');
+            setTimeout(mintaCode, 5000);
         }
     });
 
@@ -43,5 +47,8 @@ async function start() {
             await sock.sendMessage(from, { text: 'Hi! Bot dah hidup!' });
         }
     });
+
+    // Bagi bot tak crash
+    setInterval(() => {}, 10000);
 }
 start();
