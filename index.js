@@ -18,19 +18,19 @@ async function start() {
             console.log('====================');
             console.log('PAIRING CODE KAU: ' + code);
             console.log('====================');
+            console.log('CODE NI HIDUP LAMA, JANGAN RISAU, MASUKKAN PELAN-PELAN');
         } catch (e) {
             console.log('Gagal minta code: ' + e.message);
         }
     }
 
     sock.ev.on('connection.update', async (update) => {
-        const { connection, lastDisconnect } = update;
+        const { connection } = update;
         if (connection === 'open') {
             console.log('=== DAH CONNECT! BOT HIDUP! ===');
         }
         if (connection === 'close') {
-            console.log('Connection closed, restart dalam 5 saat...');
-            setTimeout(() => start(), 5000);
+            console.log('=== CONNECTION CLOSE, TAPI JANGAN RESTART, TUNGGU ===');
         }
     });
 
